@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Native Scroll Utilities Demo</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      font-family: sans-serif;
+    }
+    .top-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      background: #3b82f6;
+      z-index: 999;
+    }
+    .view-gap {
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .scroll-card {
+      background: #1e293b;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 500px;
+      border-radius: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-progress motion-indicator-bar timeline-scroll"></div>
+
+  <div class="view-gap">
+    <h1>Scroll Down to Test Utilities</h1>
+  </div>
+
+  <div class="scroll-card motion-reveal-up timeline-view">
+    <h2>Dynamic View Timeline</h2>
+    <p>This element animates smoothly based completely on its viewport intersection.</p>
+  </div>
+
+  <div class="scroll-card motion-reveal-up timeline-view">
+    <h2>Performance First</h2>
+    <p>Hardware-accelerated animations running entirely without JavaScript dependencies.</p>
+  </div>
+
+  <div class="view-gap"></div>
+
+</body>
+</html>
