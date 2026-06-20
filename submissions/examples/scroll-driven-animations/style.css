@@ -1,8 +1,12 @@
-<<<<<<< HEAD
-/* === Scroll-linked timeline (tracks whole-page scroll) === */
+/* ==========================================================================
+   EaseMotion CSS — Scroll-Driven Animation Utilities
+   Native CSS scroll timelines, zero JavaScript.
+   ========================================================================== */
+
+/* === Scroll-linked timeline (tracks whole-page scroll progress) === */
 .em-scroll-timeline {
   animation-timeline: scroll(root block);
-  animation-duration: 1ms; /* required placeholder; timeline drives progress */
+  animation-duration: 1ms; /* placeholder; actual progress comes from the timeline */
   animation-fill-mode: both;
   animation-timing-function: linear;
 }
@@ -17,7 +21,7 @@
   to   { transform: scaleX(1); }
 }
 
-/* === View-timeline (tracks an element entering/leaving viewport) === */
+/* === View-timeline (tracks an element entering/leaving the viewport) === */
 .em-scroll-view {
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
@@ -39,60 +43,20 @@
 }
 
 @keyframes em-scale-up-view {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Reduced motion: don't force scroll-linked motion on users who opt out */
+/* Respect users who've opted out of motion */
 @media (prefers-reduced-motion: reduce) {
   .em-scroll-timeline,
   .em-scroll-view {
     animation: none !important;
   }
-=======
-/* Core Scroll-Driven Animation Utilities */
-
-/* 1. View Timeline: Animates as the element enters/leaves the viewport */
-.timeline-view {
-  animation-timeline: view();
-  animation-fill-mode: both;
-}
-
-/* 2. Scroll Timeline: Animates based on the overall scrollbar progress */
-.timeline-scroll {
-  animation-timeline: scroll();
-  animation-fill-mode: both;
-}
-
-/* Sample Motion Keyframes (Simulating easemotion-css cores) */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes progressWidth {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-/* Utility classes combining keyframes */
-.motion-fade-in {
-  animation-name: fadeIn;
-  animation-duration: 1s; /* Fallback for unsupported browsers */
-}
-
-.motion-progress {
-  animation-name: progressWidth;
-  animation-duration: 1s;
->>>>>>> d62d3686ddfdb0491a23fd11296758a9f542e99f
 }

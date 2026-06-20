@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Scroll-Driven Animations
 
 Utility classes that tie EaseMotion CSS animations to native scroll progress
@@ -25,7 +24,6 @@ via `prefers-reduced-motion`.
 ## Browser support
 Chrome/Edge 115+, Firefox 137+ (or behind flag in some versions), Safari TP.
 Older browsers simply skip the animation — content is visible by default.
-=======
 # Scroll-Driven Animation Utilities
 
 This feature introduces native CSS Scroll-Driven Animation utilities to `easemotion-css`, removing the dependency on external JS engines like GSAP for basic scroll-based styling.
@@ -45,4 +43,3 @@ Combine any standard layout/motion keyframe class with a timeline utility:
 <div class="motion-fade-in timeline-view">
   <p>Look, Ma! No Javascript!</p>
 </div>
->>>>>>> d62d3686ddfdb0491a23fd11296758a9f542e99f
