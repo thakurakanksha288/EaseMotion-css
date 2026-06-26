@@ -1,0 +1,161 @@
+/* ============================================================
+   EaseMotion CSS — Image Lazy Blur Component
+   Classes: ease-lazy-wrap, ease-lazy-img, ease-lazy-placeholder,
+            ease-lazy-loaded, ease-lazy-fade
+   ============================================================ */
+
+:root {
+  --ease-lazy-duration: 0.6s;
+  --ease-lazy-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-lazy-blur-amount: 20px;
+  --ease-lazy-scale-start: 1.05;
+  --ease-lazy-bg: #1a1a2e;
+  --ease-lazy-shimmer-light: rgba(255, 255, 255, 0.06);
+  --ease-lazy-shimmer-dark: rgba(255, 255, 255, 0);
+  --ease-lazy-radius: 12px;
+  --ease-lazy-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --ease-lazy-caption-bg: rgba(0, 0, 0, 0.55);
+  --ease-lazy-caption-color: #f0f0f0;
+}
+
+/* ── Wrapper ── */
+.ease-lazy-wrap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: var(--ease-lazy-radius);
+  box-shadow: var(--ease-lazy-shadow);
+  background: var(--ease-lazy-bg);
+  line-height: 0; /* collapse inline gap */
+}
+
+/* ── Shimmer skeleton shown before anything loads ── */
+.ease-lazy-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--ease-lazy-shimmer-dark) 30%,
+    var(--ease-lazy-shimmer-light) 50%,
+    var(--ease-lazy-shimmer-dark) 70%
+  );
+  background-size: 200% 100%;
+  animation: ease-shimmer 1.6s infinite linear;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  transition: opacity 0.3s ease;
+}
+
+.ease-lazy-wrap.ease-lazy-loaded::before {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Placeholder (tiny low-res src) ── */
+.ease-lazy-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(var(--ease-lazy-blur-amount));
+  transform: scale(var(--ease-lazy-scale-start));
+  border-radius: inherit;
+  z-index: 2;
+  transition:
+    opacity var(--ease-lazy-duration) var(--ease-lazy-easing),
+    filter var(--ease-lazy-duration) var(--ease-lazy-easing);
+}
+
+.ease-lazy-wrap.ease-lazy-loaded .ease-lazy-placeholder {
+  opacity: 0;
+  filter: blur(0);
+}
+
+/* ── Full-resolution image ── */
+.ease-lazy-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(var(--ease-lazy-scale-start));
+  transition:
+    opacity var(--ease-lazy-duration) var(--ease-lazy-easing),
+    filter var(--ease-lazy-duration) var(--ease-lazy-easing),
+    transform var(--ease-lazy-duration) var(--ease-lazy-easing);
+  z-index: 3;
+  position: relative;
+}
+
+.ease-lazy-wrap.ease-lazy-loaded .ease-lazy-img {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* ── Fade-only variant (no scale) ── */
+.ease-lazy-wrap.ease-lazy-fade .ease-lazy-img {
+  transform: none;
+}
+
+.ease-lazy-wrap.ease-lazy-fade.ease-lazy-loaded .ease-lazy-img {
+  transform: none;
+}
+
+.ease-lazy-wrap.ease-lazy-fade .ease-lazy-placeholder {
+  transform: none;
+}
+
+/* ── Caption overlay ── */
+.ease-lazy-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 14px;
+  background: var(--ease-lazy-caption-bg);
+  color: var(--ease-lazy-caption-color);
+  font-size: 0.8rem;
+  font-family: system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  z-index: 4;
+  border-radius: 0 0 var(--ease-lazy-radius) var(--ease-lazy-radius);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transform: translateY(100%);
+  transition: transform 0.3s var(--ease-lazy-easing);
+}
+
+.ease-lazy-wrap:hover .ease-lazy-caption,
+.ease-lazy-wrap:focus-within .ease-lazy-caption {
+  transform: translateY(0);
+}
+
+/* ── Shimmer keyframe ── */
+@keyframes ease-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Reduced motion: skip blur/scale, keep fade only ── */
+@media (prefers-reduced-motion: reduce) {
+  .ease-lazy-img,
+  .ease-lazy-placeholder {
+    transition: opacity 0.3s ease !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .ease-lazy-wrap::before {
+    animation: none !important;
+  }
+
+  .ease-lazy-caption {
+    transition: none !important;
+  }
+}

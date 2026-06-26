@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EaseMotion CSS — Image Lazy Blur Demo</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page chrome only — not part of the component ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0d0d1a;
+      color: #e8e8f0;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+      gap: 48px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #8888aa;
+      font-size: 0.92rem;
+      max-width: 480px;
+    }
+
+    .demo-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6666aa;
+      margin-bottom: 10px;
+    }
+
+    .demo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .demo-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      margin-top: 8px;
+      padding: 8px 20px;
+      background: #3a3a6a;
+      color: #e8e8f0;
+      border: 1px solid #5555aa;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #5555aa; }
+    button:focus-visible { outline: 2px solid #8888dd; outline-offset: 2px; }
+
+    footer {
+      font-size: 0.75rem;
+      color: #44446a;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Image Lazy Blur</h1>
+    <p>
+      Blur-up placeholder technique — images reveal with a smooth unblur
+      transition using only CSS classes and a tiny observer script.
+    </p>
+  </header>
+
+  <!-- ── Variant 1: Blur + Scale (default) ── -->
+  <section class="demo-section" aria-labelledby="v1-label">
+    <p class="demo-label" id="v1-label">Default — blur + scale reveal</p>
+    <div class="demo-row">
+
+      <div class="ease-lazy-wrap" style="width:280px; height:200px;">
+        <!-- Placeholder: tiny image scaled up and blurred via CSS -->
+        <img
+          class="ease-lazy-placeholder"
+          src="https://picsum.photos/id/1015/20/14"
+          alt=""
+          aria-hidden="true"
+        />
+        <!-- Full-res image loaded lazily -->
+        <img
+          class="ease-lazy-img"
+          data-src="https://picsum.photos/id/1015/560/400"
+          src=""
+          alt="Mountain landscape reflecting in a lake"
+          width="280"
+          height="200"
+        />
+        <div class="ease-lazy-caption">Mountain Lake — hover to reveal</div>
+      </div>
+
+      <div class="ease-lazy-wrap" style="width:280px; height:200px;">
+        <img
+          class="ease-lazy-placeholder"
+          src="https://picsum.photos/id/1039/20/14"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="ease-lazy-img"
+          data-src="https://picsum.photos/id/1039/560/400"
+          src=""
+          alt="Forest path in fog"
+          width="280"
+          height="200"
+        />
+        <div class="ease-lazy-caption">Forest Path — hover to reveal</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Variant 2: Fade only (ease-lazy-fade) ── -->
+  <section class="demo-section" aria-labelledby="v2-label">
+    <p class="demo-label" id="v2-label">Fade variant — <code>ease-lazy-fade</code></p>
+    <div class="demo-row">
+
+      <div class="ease-lazy-wrap ease-lazy-fade" style="width:280px; height:200px;">
+        <img
+          class="ease-lazy-placeholder"
+          src="https://picsum.photos/id/1043/20/14"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="ease-lazy-img"
+          data-src="https://picsum.photos/id/1043/560/400"
+          src=""
+          alt="Sunrise over ocean"
+          width="280"
+          height="200"
+        />
+        <div class="ease-lazy-caption">Ocean Sunrise — fade only</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Trigger button ── -->
+  <button id="load-btn" aria-label="Trigger lazy image loading">
+    ▶ Simulate Lazy Load
+  </button>
+
+  <footer>EaseMotion CSS · image-lazy-blur · GSSoC 2026</footer>
+
+  <script>
+    /**
+     * Tiny vanilla observer — no external deps.
+     * Adds .ease-lazy-loaded to .ease-lazy-wrap when the full image finishes loading.
+     */
+    function activateLazyBlur() {
+      const images = document.querySelectorAll('.ease-lazy-img[data-src]');
+
+      const load = (img) => {
+        const wrap = img.closest('.ease-lazy-wrap');
+        img.src = img.dataset.src;
+        img.addEventListener('load', () => {
+          wrap && wrap.classList.add('ease-lazy-loaded');
+        }, { once: true });
+        // Fallback if image already cached
+        if (img.complete && img.naturalWidth > 0) {
+          wrap && wrap.classList.add('ease-lazy-loaded');
+        }
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              load(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px 100px 0px' });
+
+        images.forEach(img => observer.observe(img));
+      } else {
+        // Fallback: load all immediately
+        images.forEach(load);
+      }
+    }
+
+    // Auto-activate on scroll/visibility
+    activateLazyBlur();
+
+    // Manual trigger button for demo purposes
+    document.getElementById('load-btn').addEventListener('click', () => {
+      document.querySelectorAll('.ease-lazy-img[data-src]').forEach(img => {
+        const wrap = img.closest('.ease-lazy-wrap');
+        if (wrap && !wrap.classList.contains('ease-lazy-loaded')) {
+          img.src = img.dataset.src;
+          img.addEventListener('load', () => wrap.classList.add('ease-lazy-loaded'), { once: true });
+          if (img.complete && img.naturalWidth > 0) wrap.classList.add('ease-lazy-loaded');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
