@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EaseMotion CSS — Animated Notification Bell</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Demo-only styles — not part of the component */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem;
+      gap: 3rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #111827; color: #f9fafb; }
+      .demo-card { background: #1f2937; border-color: #374151; }
+      .demo-label { color: #9ca3af; }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+
+    .demo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      width: 100%;
+      max-width: 780px;
+    }
+
+    .demo-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      min-width: 180px;
+    }
+
+    .demo-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    .demo-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    button {
+      padding: 0.45rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #374151;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 150ms, border-color 150ms;
+    }
+
+    button:hover { background: #f3f4f6; border-color: #9ca3af; }
+    button:active { background: #e5e7eb; }
+
+    @media (prefers-color-scheme: dark) {
+      button { background: #374151; border-color: #4b5563; color: #f9fafb; }
+      button:hover { background: #4b5563; }
+    }
+
+    .ease-bell { font-size: 2.5rem; }  /* scale up demo bells */
+  </style>
+</head>
+<body>
+
+  <header style="text-align:center;">
+    <h1>Animated Notification Bell</h1>
+    <p class="subtitle">EaseMotion CSS component · <code>ease-bell</code></p>
+  </header>
+
+  <div class="demo-grid">
+
+    <!-- 1. Basic bell — numeric badge -->
+    <div class="demo-card">
+      <span class="demo-label">Basic — numeric badge</span>
+
+      <button
+        class="ease-bell"
+        id="bell-basic"
+        aria-label="Notifications"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <!-- Bell SVG inline so it inherits ease-bell__icon stroke -->
+        <svg class="ease-bell__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="ease-bell__badge" id="badge-basic" aria-label="3 unread notifications">3</span>
+      </button>
+
+      <div class="demo-controls">
+        <button onclick="addUnread('bell-basic','badge-basic')">Add unread (+1)</button>
+        <button onclick="triggerRing('bell-basic')">Ring it!</button>
+        <button onclick="clearUnread('bell-basic','badge-basic')">Clear</button>
+      </div>
+    </div>
+
+    <!-- 2. Dot-only variant -->
+    <div class="demo-card">
+      <span class="demo-label">Dot-only variant</span>
+
+      <button
+        class="ease-bell ease-bell--dot"
+        id="bell-dot"
+        aria-label="Notifications"
+        aria-live="polite"
+      >
+        <svg class="ease-bell__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="ease-bell__badge" id="badge-dot" aria-label="Unread notifications"></span>
+      </button>
+
+      <div class="demo-controls">
+        <button onclick="markUnread('bell-dot','badge-dot')">Mark unread</button>
+        <button onclick="triggerRing('bell-dot')">Ring it!</button>
+        <button onclick="clearUnread('bell-dot','badge-dot')">Clear</button>
+      </div>
+    </div>
+
+    <!-- 3. 99+ overflow variant -->
+    <div class="demo-card">
+      <span class="demo-label">99+ overflow</span>
+
+      <button
+        class="ease-bell ease-bell--overflow"
+        id="bell-overflow"
+        aria-label="Notifications"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <svg class="ease-bell__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="ease-bell__badge" id="badge-overflow" aria-label="99 or more unread notifications">99+</span>
+      </button>
+
+      <div class="demo-controls">
+        <button onclick="markUnread('bell-overflow','badge-overflow')">Show 99+</button>
+        <button onclick="triggerRing('bell-overflow')">Ring it!</button>
+        <button onclick="clearUnread('bell-overflow','badge-overflow')">Clear</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ─── Helper: trigger ring-shake once ─────────────────────────────────────
+    function triggerRing(bellId) {
+      const bell = document.getElementById(bellId);
+      // Remove then re-add so animation retriggers even if already .is-ringing
+      bell.classList.remove('is-ringing');
+      void bell.offsetWidth; // force reflow
+      bell.classList.add('is-ringing');
+      bell.addEventListener('animationend', () => bell.classList.remove('is-ringing'), { once: true });
+    }
+
+    // ─── Helper: add unread to numeric bell ──────────────────────────────────
+    function addUnread(bellId, badgeId) {
+      const bell  = document.getElementById(bellId);
+      const badge = document.getElementById(badgeId);
+      const current = parseInt(badge.textContent) || 0;
+      badge.textContent = current + 1;
+      badge.setAttribute('aria-label', `${current + 1} unread notifications`);
+
+      // Retrigger pop animation on count change
+      if (bell.classList.contains('has-unread')) {
+        badge.style.animation = 'none';
+        void badge.offsetWidth;
+        badge.style.animation = '';
+      }
+      bell.classList.add('has-unread');
+      triggerRing(bellId);
+    }
+
+    // ─── Helper: mark unread (dot or 99+) ────────────────────────────────────
+    function markUnread(bellId, badgeId) {
+      const bell = document.getElementById(bellId);
+      bell.classList.remove('has-unread');
+      void bell.offsetWidth;
+      bell.classList.add('has-unread');
+      triggerRing(bellId);
+    }
+
+    // ─── Helper: clear all unread ─────────────────────────────────────────────
+    function clearUnread(bellId, badgeId) {
+      const bell  = document.getElementById(bellId);
+      const badge = document.getElementById(badgeId);
+      bell.classList.remove('has-unread', 'is-ringing');
+      if (badge.dataset.initialText === undefined) badge.dataset.initialText = badge.textContent;
+      // Reset numeric badge back to initial text if applicable
+      const initial = badge.dataset.initialText;
+      if (initial) badge.textContent = initial;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+/* =====================================================
+   EaseMotion CSS — Animated Notification Bell
+   Component: notification-bell
+   Classes: ease-bell, ease-bell--dot, ease-bell--overflow
+   State classes: .is-ringing, .has-unread
+   ===================================================== */
+
+/* ── Custom Properties ── */
+:root {
+  --ease-bell-size: 2rem;
+  --ease-bell-color: #374151;
+  --ease-bell-color-active: #111827;
+  --ease-bell-badge-bg: #ef4444;
+  --ease-bell-badge-color: #ffffff;
+  --ease-bell-badge-font-size: 0.65rem;
+  --ease-bell-badge-size: 1.1rem;
+  --ease-bell-dot-size: 0.55rem;
+  --ease-bell-ring-color: rgba(239, 68, 68, 0.45);
+  --ease-bell-duration-shake: 600ms;
+  --ease-bell-duration-pop: 350ms;
+  --ease-bell-duration-pulse: 1.8s;
+  --ease-bell-easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ease-bell-color: #9ca3af;
+    --ease-bell-color-active: #f3f4f6;
+    --ease-bell-badge-bg: #ef4444;
+    --ease-bell-ring-color: rgba(239, 68, 68, 0.35);
+  }
+}
+
+/* ── Keyframes ── */
+
+/* Ring-shake: rotation oscillation mimicking a ringing bell */
+@keyframes ease-bell-shake {
+  0%   { transform: rotate(0deg); }
+  10%  { transform: rotate(18deg); }
+  25%  { transform: rotate(-16deg); }
+  40%  { transform: rotate(14deg); }
+  55%  { transform: rotate(-10deg); }
+  70%  { transform: rotate(7deg); }
+  85%  { transform: rotate(-4deg); }
+  95%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Badge pop-in: scale bounce when badge appears or count updates */
+@keyframes ease-badge-pop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.3); opacity: 1; }
+  80%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Badge pulse-ring: expanding soft glow ring for unread state */
+@keyframes ease-badge-pulse {
+  0%   { transform: scale(1); opacity: 0.7; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ── Base Wrapper ── */
+.ease-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ease-bell-size);
+  height: var(--ease-bell-size);
+  cursor: pointer;
+  /* transform-origin at top so the bell swings from its hanger */
+  transform-origin: top center;
+}
+
+/* SVG / icon inside the wrapper */
+.ease-bell__icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--ease-bell-color);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 200ms ease;
+  transform-origin: top center;
+}
+
+.ease-bell:hover .ease-bell__icon,
+.ease-bell:focus-visible .ease-bell__icon {
+  stroke: var(--ease-bell-color-active);
+}
+
+/* ── Badge (numeric count) ── */
+.ease-bell__badge {
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+  min-width: var(--ease-bell-badge-size);
+  height: var(--ease-bell-badge-size);
+  padding: 0 0.25rem;
+  border-radius: 9999px;
+  background: var(--ease-bell-badge-bg);
+  color: var(--ease-bell-badge-color);
+  font-family: system-ui, sans-serif;
+  font-size: var(--ease-bell-badge-font-size);
+  font-weight: 700;
+  line-height: var(--ease-bell-badge-size);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  /* Hidden by default; shown via .has-unread */
+  display: none;
+}
+
+/* Pulse ring lives as a ::before pseudo on the badge */
+.ease-bell__badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--ease-bell-ring-color);
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ── Dot-only variant ── */
+.ease-bell--dot .ease-bell__badge {
+  min-width: var(--ease-bell-dot-size);
+  width: var(--ease-bell-dot-size);
+  height: var(--ease-bell-dot-size);
+  padding: 0;
+  font-size: 0;
+  top: 0;
+  right: 0;
+}
+
+/* ── Overflow "99+" variant ── */
+/* No extra CSS needed; the consumer sets the text content to "99+"
+   and adds the class for wider padding */
+.ease-bell--overflow .ease-bell__badge {
+  padding: 0 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+/* ── State: .has-unread — reveals badge, starts pulse ── */
+.ease-bell.has-unread .ease-bell__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Pop-in animation fires once when state is applied */
+  animation: ease-badge-pop var(--ease-bell-duration-pop) var(--ease-bell-easing-bounce) both;
+}
+
+.ease-bell.has-unread .ease-bell__badge::before {
+  animation: ease-badge-pulse var(--ease-bell-duration-pulse) ease-out infinite;
+}
+
+/* ── State: .is-ringing — triggers bell shake ── */
+.ease-bell.is-ringing .ease-bell__icon {
+  animation: ease-bell-shake var(--ease-bell-duration-shake) ease-in-out both;
+}
+
+/* ── Reduced motion: remove all animation, keep visibility ── */
+@media (prefers-reduced-motion: reduce) {
+  .ease-bell.is-ringing .ease-bell__icon {
+    animation: none;
+  }
+  .ease-bell.has-unread .ease-bell__badge {
+    animation: none;
+  }
+  .ease-bell.has-unread .ease-bell__badge::before {
+    animation: none;
+    opacity: 0;
+  }
+}
