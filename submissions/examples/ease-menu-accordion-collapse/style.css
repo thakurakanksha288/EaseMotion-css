@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Theme Configurations & Base Setup
+   ========================================================================== */
+:root {
+    --bg-surface: #0f172a;
+    --card-bg: #1e293b;
+    --accent-glow: #38bdf8;
+    --border-subtle: #334155;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    /* Animation Tokens */
+    --ease-accordion: cubic-bezier(0.25, 1, 0.5, 1);
+    --accordion-max-h: 200px; /* Custom Property handling max-height target limits */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.showcase-container {
+    width: 100%;
+    max-width: 640px;
+}
+
+.showcase-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.showcase-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.showcase-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Accordion Engine Layout & CSS-Driven Mechanics
+   ========================================================================== */
+.em-accordion-group {
+    background: var(--card-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.em-accordion-item {
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.em-accordion-item:last-child {
+    border-bottom: none;
+}
+
+/* Hide Structural Checkbox Controller */
+.em-accordion-toggle {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+/* Header Trigger Component */
+.em-accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.em-accordion-header:hover {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--accent-glow);
+}
+
+/* Chevron UI Indicator */
+.chevron-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    transform: rotate(0deg);
+    transition: transform 0.4s var(--ease-accordion), color 0.25s ease;
+    will-change: transform;
+}
+
+.em-accordion-header:hover .chevron-icon {
+    color: var(--accent-glow);
+}
+
+/* ==========================================================================
+   State-Driven Transitions (Slide Down/Up & Rotation Orchestration)
+   ========================================================================== */
+
+/* Structural Wrapper Limiting Element Flow Layouts */
+.em-accordion-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease-accordion);
+    will-change: max-height;
+}
+
+/* Inside Content Container (Maintains Padding Context) */
+.em-accordion-content {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.925rem;
+    line-height: 1.6;
+}
+
+/* Checked / Expansion Matrix */
+.em-accordion-toggle:checked ~ .em-accordion-collapse {
+    max-height: var(--accordion-max-h);
+}
+
+.em-accordion-toggle:checked ~ .em-accordion-header {
+    color: var(--accent-glow);
+}
+
+.em-accordion-toggle:checked ~ .em-accordion-header .chevron-icon {
+    transform: rotate(180deg);
+    color: var(--accent-glow);
+}
