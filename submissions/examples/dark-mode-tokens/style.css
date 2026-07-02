@@ -1,0 +1,164 @@
+/* --- THE LIGHT MODE DESIGN TOKENS (DEFAULT CONFIGURATION) --- */
+:root {
+    --bg: #ffffff;
+    --surface: #f5f7fb;
+    --text: #111827;
+    --muted-text: #6b7280;
+    --border: #e5e7eb;
+    --primary: #4f46e5;
+    --accent: #06b6d4;
+    
+    /* Document Presentation Properties */
+    --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --radius-card: 16px;
+    --transition-timing: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* --- THE DARK MODE DESIGN TOKENS (AUTOMATIC SYSTEM PREFERENCE) --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0b0f19;
+        --surface: #111827;
+        --text: #f9fafb;
+        --muted-text: #9ca3af;
+        --border: #1f2937;
+        --primary: #818cf8;
+        --accent: #22d3ee;
+    }
+}
+
+/* Base Body Framework Structure Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    transition: var(--transition-timing);
+}
+
+.showcase-container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.showcase-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.badge {
+    display: inline-block;
+    background-color: var(--primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 30px;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--transition-timing);
+}
+
+.showcase-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+}
+
+.showcase-header p {
+    color: var(--muted-text);
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: var(--transition-timing);
+}
+
+.demo-arena {
+    margin-bottom: 2.5rem;
+}
+
+/* --- THE SYSTEM ADAPTIVE CARD COMPONENT --- */
+.em-dashboard-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: var(--transition-timing);
+}
+
+@media (prefers-color-scheme: dark) {
+    .em-dashboard-card {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+}
+
+.card-accent-indicator {
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transition: var(--transition-timing);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card-body h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.card-body p {
+    color: var(--muted-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    transition: var(--transition-timing);
+}
+
+/* Visual Variable Token Tags Display Layout */
+.token-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.token-pill {
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    transition: var(--transition-timing);
+}
+
+/* Testing Simulation Footnote */
+.simulation-footer {
+    text-align: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: var(--transition-timing);
+}
+
+.simulation-footer p {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.4;
+}

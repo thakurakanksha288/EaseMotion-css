@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaseMotion CSS - Native Dark Mode Tokens</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="showcase-container">
+        <header class="showcase-header">
+            <span class="badge">CSS Native Token Feature</span>
+            <h1>Media-Driven Dark Mode Tokens</h1>
+            <p>Zero JavaScript. Zero layout flashes. Driven exclusively by the user's system preference profiles via <code>prefers-color-scheme</code>.</p>
+        </header>
+
+        <section class="demo-arena">
+            <div class="em-dashboard-card">
+                <div class="card-accent-indicator"></div>
+                <div class="card-body">
+                    <h2>EaseMotion Dashboard</h2>
+                    <p>This layout container card automatically adapts its colors, background, borders, and typography variables at runtime to match your OS theme.</p>
+                    
+                    <div class="token-pills-container">
+                        <span class="token-pill pill-bg"><code>--bg</code></span>
+                        <span class="token-pill pill-surface"><code>--surface</code></span>
+                        <span class="token-pill pill-text"><code>--text</code></span>
+                        <span class="token-pill pill-primary"><code>--primary</code></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="simulation-footer">
+            <p>💡 <strong>How to test:</strong> Switch your operating system or browser devtools simulation mode between <strong>Light</strong> and <strong>Dark</strong> to witness a fluid color transition.</p>
+        </footer>
+    </main>
+</body>
+</html>
